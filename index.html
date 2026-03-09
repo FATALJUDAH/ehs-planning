@@ -469,12 +469,10 @@ function getHolidays(year) {
   return h;
 }
 
-// ─── SHAREPOINT CONFIG ────────────────────────────────────────────────────────
-const SP_SITE   = 'https://labcorp.sharepoint.com/sites/EHSGVA';
-const SP_LIB    = 'Shared Documents';
-const SP_FILE   = 'planning-ehs-data.json';
-const SP_API    = `${SP_SITE}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(SP_LIB)}')/Files('${SP_FILE}')`;
-const SP_UPLOAD = `${SP_SITE}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(SP_LIB)}')/Files/Add(url='${SP_FILE}',overwrite=true)`;
+// ─── JSONBIN CONFIG ───────────────────────────────────────────────────────────
+const JSONBIN_ID  = '69aea4b643b1c97be9c4698b';
+const JSONBIN_KEY = '$2a$10$PFpk.wY3oJo03R2S5zUFnOMbY5xGVGi3DwAQcRfV3DY4LOt43aL02';
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 const today = new Date();
@@ -485,32 +483,19 @@ let planningData = {};
 let isSaving = false;
 let saveQueue = false;
 
-// ─── SHAREPOINT I/O ──────────────────────────────────────────────────────────
-async function getDigest() {
-  const r = await fetch(`${SP_SITE}/_api/contextinfo`, {
-    method: 'POST',
-    headers: { 'Accept': 'application/json;odata=verbose' },
-    credentials: 'include'
-  });
-  const j = await r.json();
-  return j.d.GetContextWebInformation.FormDigestValue;
-}
-
+// ─── JSONBIN I/O ─────────────────────────────────────────────────────────────
 async function loadData() {
   setStatusUI('sync', '⏳ Chargement…');
   try {
-    const r = await fetch(`${SP_API}/$value`, {
-      headers: { 'Accept': 'application/json' },
-      credentials: 'include'
+    const r = await fetch(`${JSONBIN_URL}/latest`, {
+      headers: {
+        'X-Master-Key': JSONBIN_KEY,
+        'X-Bin-Meta': 'false'
+      }
     });
-    if (r.ok) {
-      const text = await r.text();
-      planningData = JSON.parse(text);
-    } else if (r.status === 404) {
-      planningData = {};
-    } else {
-      throw new Error(`HTTP ${r.status}`);
-    }
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j = await r.json();
+    planningData = (j && typeof j === 'object' && !j.init) ? j : {};
     setStatusUI('ok', '✅ Synchronisé');
   } catch(e) {
     setStatusUI('warn', '⚠️ Hors ligne — données locales');
@@ -525,17 +510,13 @@ async function saveData() {
   isSaving = true;
   setStatusUI('sync', '💾 Sauvegarde…');
   try {
-    const digest = await getDigest();
-    const blob = new Blob([JSON.stringify(planningData, null, 2)], { type: 'application/json' });
-    const r = await fetch(SP_UPLOAD, {
-      method: 'POST',
+    const r = await fetch(JSONBIN_URL, {
+      method: 'PUT',
       headers: {
-        'Accept': 'application/json;odata=verbose',
-        'X-RequestDigest': digest,
-        'Content-Length': blob.size
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_KEY
       },
-      credentials: 'include',
-      body: blob
+      body: JSON.stringify(planningData)
     });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     setStatusUI('ok', '✅ Synchronisé');
