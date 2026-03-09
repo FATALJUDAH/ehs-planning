@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Planning Présence EHS — Labcorp Geneva</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #f8fafc;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --text-faint: #94a3b8;
+    --present: #0ea5e9;
+    --present-bg: #e0f2fe;
+    --wfh: #f59e0b;
+    --wfh-bg: #fef3c7;
+    --conge: #ef4444;
+    --conge-bg: #fee2e2;
+    --holiday: #8b5cf6;
+    --holiday-bg: #ede9fe;
+    --weekend: #e2e8f0;
+    --weekend-text: #94a3b8;
+    --today-ring: #0ea5e9;
+    --accent: #0369a1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+  /* HEADER */
+  .header {
+    max-width: 1000px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .header-title h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+  .header-title p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+  /* PERSON SELECTOR */
+  .person-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .person-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 4px;
+  }
+  .person-btn {
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .person-btn:hover { border-color: var(--present); color: var(--present); }
+  .person-btn.active {
+    background: var(--present);
+    border-color: var(--present);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(14,165,233,0.25);
+  }
+  /* NAV */
+  .nav-bar {
+    max-width: 1000px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .nav-month {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    min-width: 180px;
+    text-align: center;
+  }
+  .nav-btn {
+    width: 34px; height: 34px;
+    border-radius: 999px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .nav-btn:hover { border-color: var(--present); color: var(--present); }
+  /* LEGEND */
+  .legend {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    max-width: 1000px; margin: 0 auto 16px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+  }
+  /* CALENDAR GRID */
+  .calendar {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .calendar-head {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .calendar-head-cell {
+    text-align: center;
+    padding: 10px 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    font-family: 'DM Mono', monospace;
+  }
+  .calendar-head-cell.weekend { color: var(--weekend-text); }
+  .calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .day-cell {
+    min-height: 110px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 6px;
+    position: relative;
+    transition: background 0.1s;
+    vertical-align: top;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .day-cell:nth-child(7n) { border-right: none; }
+  .day-cell.empty { background: var(--surface2); }
+  .day-cell.weekend-day { background: #f8fafc; }
+  .day-cell.holiday-day { background: var(--holiday-bg); }
+  .day-cell.today { box-shadow: inset 0 0 0 2px var(--today-ring); }
+  .day-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .day-number.today-num { color: var(--present); }
+  .day-number.weekend-num { color: var(--weekend-text); }
+  .holiday-badge {
+    font-size: 9px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    color: var(--holiday);
+    background: var(--holiday-bg);
+    border: 1px solid var(--holiday);
+    border-radius: 4px;
+    padding: 1px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+  }
+  /* ABSENT section (top of day) */
+  .absent-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .person-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.1s, transform 0.1s;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .person-chip:hover { opacity: 0.8; transform: scale(1.03); }
+  .chip-wfh { background: var(--wfh-bg); color: #b45309; border: 1px solid #fde68a; }
+  .chip-conge { background: var(--conge-bg); color: #b91c1c; border: 1px solid #fecaca; }
+  .chip-present { background: var(--present-bg); color: #0369a1; border: 1px solid #bae6fd; }
+  /* PRESENT section (bottom divider) */
+  .present-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2px 0;
+  }
+  .present-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: auto;
+  }
+  /* WEEK VIEW */
+  .week-view {
+    max-width: 1000px;
+    margin: 20px auto 0;
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .week-header {
+    padding: 14px 20px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .week-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .week-table th {
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    font-family: 'DM Mono', monospace;
+    text-align: left;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .week-table th.today-col { color: var(--present); }
+  .week-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    vertical-align: middle;
+  }
+  .week-table tr:last-child td { border-bottom: none; }
+  .week-table td.person-name {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 13px;
+    width: 110px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+  }
+  .badge-present { background: var(--present-bg); color: #0369a1; }
+  .badge-wfh { background: var(--wfh-bg); color: #b45309; }
+  .badge-conge { background: var(--conge-bg); color: #b91c1c; }
+  .badge-holiday { background: var(--holiday-bg); color: #6d28d9; }
+  /* STATS */
+  .stats-bar {
+    max-width: 1000px;
+    margin: 16px auto 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 120px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    font-family: 'DM Mono', monospace;
+  }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-faint);
+  }
+  /* INSTRUCTIONS */
+  .instructions {
+    max-width: 1000px;
+    margin: 14px auto 0;
+    font-size: 11px;
+    color: var(--text-faint);
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+  }
+  @media (max-width: 600px) {
+    .day-cell { min-height: 70px; }
+    .person-chip { font-size: 8px; padding: 1px 3px; }
+    .day-number { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">
+    <h1>Planning Présence · EHS</h1>
+    <p>Labcorp Geneva — Calendrier officiel Canton de Genève &nbsp;·&nbsp; <span id="sync-status" style="font-weight:600;">⏳ Chargement…</span></p>
+  </div>
+  <div class="person-bar">
+    <span class="person-label">Saisir pour :</span>
+    <button class="person-btn active" data-person="0" onclick="selectPerson(0)">Thomas</button>
+    <button class="person-btn" data-person="1" onclick="selectPerson(1)">Sandrine</button>
+    <button class="person-btn" data-person="2" onclick="selectPerson(2)">Laurence</button>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn" onclick="prevMonth()">&#8249;</button>
+  <div class="nav-month" id="nav-month-label"></div>
+  <button class="nav-btn" onclick="nextMonth()">&#8250;</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--present)"></div> Présentiel (défaut)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--wfh)"></div> Work From Home</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--conge)"></div> Congés / Absence</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div> Férié Genève</div>
+  <div class="legend-item" style="font-size:10px;color:var(--text-faint)">Clic = changer statut · Weekeend = grisé</div>
+</div>
+
+<div class="calendar" id="calendar-grid"></div>
+
+<div class="week-view">
+  <div class="week-header">📅 Semaine en cours</div>
+  <table class="week-table" id="week-table"></table>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+
+<div class="instructions">Clic sur un jour pour cycler : Présentiel → WFH → Congés → Présentiel. Les données sont sauvegardées dans le navigateur.</div>
+
+<script>
+// ─── CONFIG ─────────────────────────────────────────────────────────────────
+const TEAM = ['Thomas', 'Sandrine', 'Laurence'];
+const STATUS_CYCLE = ['present', 'wfh', 'conge'];
+const STATUS_CONFIG = {
+  present: { label: 'Présentiel', short: '🏢', cls: 'chip-present', badge: 'badge-present' },
+  wfh:     { label: 'WFH',        short: '🏠', cls: 'chip-wfh',     badge: 'badge-wfh' },
+  conge:   { label: 'Congés',     short: '🌴', cls: 'chip-conge',   badge: 'badge-conge' },
+};
+const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DAYS_FR = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+
+// ─── JOURS FÉRIÉS CANTON DE GENÈVE (fixes + Pâques calculés) ────────────────
+function getHolidays(year) {
+  const h = {};
+  const add = (m, d, label) => { h[`${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`] = label; };
+
+  // Fixes
+  add(1,  1,  'Nouvel An');
+  add(1,  2,  'Restauration GE');
+  add(5,  1,  'Fête du Travail');
+  add(8,  1,  'Fête Nationale');
+  add(9,  12, 'Jeûne genevois'); // 1er jeudi après 1er dim de sep
+  add(12, 25, 'Noël');
+  add(12, 31, 'St-Sylvestre');
+
+  // Jeûne genevois : 1er jeudi après le 1er dimanche de septembre
+  let sep1 = new Date(year, 8, 1);
+  let firstSun = sep1.getDay() === 0 ? 1 : 1 + (7 - sep1.getDay());
+  let jeune = new Date(year, 8, firstSun + 4);
+  // correct if firstSun+4 > month
+  const jm = String(jeune.getMonth()+1).padStart(2,'0');
+  const jd = String(jeune.getDate()).padStart(2,'0');
+  h[`${year}-${jm}-${jd}`] = 'Jeûne genevois';
+
+  // Pâques (algorithme Meeus/Jones/Butcher)
+  const a = year % 19, b = Math.floor(year/100), c = year % 100;
+  const d2 = Math.floor(b/4), e = b % 4, f = Math.floor((b+8)/25);
+  const g = Math.floor((b-f+1)/3), h2 = (19*a+b-d2-g+15) % 30;
+  const i = Math.floor(c/4), k = c % 4;
+  const l = (32+2*e+2*i-h2-k) % 7;
+  const m2 = Math.floor((a+11*h2+22*l)/451);
+  const month = Math.floor((h2+l-7*m2+114)/31);
+  const day = ((h2+l-7*m2+114) % 31)+1;
+  const easter = new Date(year, month-1, day);
+
+  const addEaster = (offset, label) => {
+    const d3 = new Date(easter); d3.setDate(d3.getDate()+offset);
+    const mm = String(d3.getMonth()+1).padStart(2,'0');
+    const dd = String(d3.getDate()).padStart(2,'0');
+    h[`${year}-${mm}-${dd}`] = label;
+  };
+  addEaster(-2, 'Vendredi Saint');
+  addEaster(0,  'Pâques');
+  addEaster(1,  'Lundi de Pâques');
+  addEaster(39, 'Ascension');
+  addEaster(49, 'Pentecôte');
+  addEaster(50, 'Lundi Pentecôte');
+
+  return h;
+}
+
+// ─── SHAREPOINT CONFIG ────────────────────────────────────────────────────────
+const SP_SITE   = 'https://labcorp.sharepoint.com/sites/EHSGVA';
+const SP_LIB    = 'Shared Documents';
+const SP_FILE   = 'planning-ehs-data.json';
+const SP_API    = `${SP_SITE}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(SP_LIB)}')/Files('${SP_FILE}')`;
+const SP_UPLOAD = `${SP_SITE}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(SP_LIB)}')/Files/Add(url='${SP_FILE}',overwrite=true)`;
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const today = new Date();
+let viewYear  = today.getFullYear();
+let viewMonth = today.getMonth();
+let activePerson = 0;
+let planningData = {};
+let isSaving = false;
+let saveQueue = false;
+
+// ─── SHAREPOINT I/O ──────────────────────────────────────────────────────────
+async function getDigest() {
+  const r = await fetch(`${SP_SITE}/_api/contextinfo`, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json;odata=verbose' },
+    credentials: 'include'
+  });
+  const j = await r.json();
+  return j.d.GetContextWebInformation.FormDigestValue;
+}
+
+async function loadData() {
+  setStatusUI('sync', '⏳ Chargement…');
+  try {
+    const r = await fetch(`${SP_API}/$value`, {
+      headers: { 'Accept': 'application/json' },
+      credentials: 'include'
+    });
+    if (r.ok) {
+      const text = await r.text();
+      planningData = JSON.parse(text);
+    } else if (r.status === 404) {
+      planningData = {};
+    } else {
+      throw new Error(`HTTP ${r.status}`);
+    }
+    setStatusUI('ok', '✅ Synchronisé');
+  } catch(e) {
+    setStatusUI('warn', '⚠️ Hors ligne — données locales');
+    try { const d = localStorage.getItem('ehs_planning_fallback'); if(d) planningData = JSON.parse(d); } catch(_){}
+  }
+  renderAll();
+}
+
+async function saveData() {
+  try { localStorage.setItem('ehs_planning_fallback', JSON.stringify(planningData)); } catch(_){}
+  if (isSaving) { saveQueue = true; return; }
+  isSaving = true;
+  setStatusUI('sync', '💾 Sauvegarde…');
+  try {
+    const digest = await getDigest();
+    const blob = new Blob([JSON.stringify(planningData, null, 2)], { type: 'application/json' });
+    const r = await fetch(SP_UPLOAD, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json;odata=verbose',
+        'X-RequestDigest': digest,
+        'Content-Length': blob.size
+      },
+      credentials: 'include',
+      body: blob
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    setStatusUI('ok', '✅ Synchronisé');
+  } catch(e) {
+    setStatusUI('warn', '⚠️ Sauvegarde échouée — données locales conservées');
+  } finally {
+    isSaving = false;
+    if (saveQueue) { saveQueue = false; saveData(); }
+  }
+}
+
+function setStatusUI(type, msg) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = type === 'ok' ? '#16a34a' : type === 'warn' ? '#b45309' : '#0369a1';
+}
+
+function getStatus(person, year, month, day) {
+  const k = `${year}-${month}-${person}-${day}`;
+  return planningData[k] || 'present';
+}
+function setStatusVal(person, year, month, day, status) {
+  const k = `${year}-${month}-${person}-${day}`;
+  if (status === 'present') delete planningData[k];
+  else planningData[k] = status;
+  saveData();
+}
+function cycleStatus(person, year, month, day) {
+  const cur = getStatus(person, year, month, day);
+  const idx = STATUS_CYCLE.indexOf(cur);
+  const next = STATUS_CYCLE[(idx+1) % STATUS_CYCLE.length];
+  setStatusVal(person, year, month, day, next);
+  renderAll();
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function isWeekend(year, month, day) {
+  const d = new Date(year, month, day).getDay();
+  return d === 0 || d === 6;
+}
+function getFirstDayOfWeek(year, month) {
+  const d = new Date(year, month, 1).getDay();
+  return d === 0 ? 6 : d - 1;
+}
+function daysInMonth(year, month) { return new Date(year, month+1, 0).getDate(); }
+function pad2(n) { return String(n).padStart(2,'0'); }
+function dateKey(year, month, day) { return `${year}-${pad2(month+1)}-${pad2(day)}`; }
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function selectPerson(idx) {
+  activePerson = idx;
+  document.querySelectorAll('.person-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === idx);
+  });
+}
+
+function renderAll() {
+  renderCalendar();
+  renderWeekView();
+  renderStats();
+}
+
+function renderCalendar() {
+  const holidays = getHolidays(viewYear);
+  document.getElementById('nav-month-label').textContent = `${MONTHS_FR[viewMonth]} ${viewYear}`;
+  const totalDays = daysInMonth(viewYear, viewMonth);
+  const firstDay  = getFirstDayOfWeek(viewYear, viewMonth);
+
+  let html = `<div class="calendar-head">`;
+  DAYS_FR.forEach((d,i) => {
+    html += `<div class="calendar-head-cell${i>=5?' weekend':''}">${d}</div>`;
+  });
+  html += `</div><div class="calendar-body">`;
+
+  // Empty cells
+  for (let e = 0; e < firstDay; e++) html += `<div class="day-cell empty"></div>`;
+
+  for (let day = 1; day <= totalDays; day++) {
+    const weekend  = isWeekend(viewYear, viewMonth, day);
+    const dk       = dateKey(viewYear, viewMonth, day);
+    const holiday  = holidays[dk];
+    const isToday  = today.getFullYear()===viewYear && today.getMonth()===viewMonth && today.getDate()===day;
+
+    let cellClass = 'day-cell';
+    if (weekend)  cellClass += ' weekend-day';
+    if (holiday)  cellClass += ' holiday-day';
+    if (isToday)  cellClass += ' today';
+
+    let numClass = 'day-number';
+    if (isToday)  numClass += ' today-num';
+    if (weekend)  numClass += ' weekend-num';
+
+    // Day number + holiday badge
+    let inner = `<div class="${numClass}">${day}`;
+    if (holiday) inner += `<span class="holiday-badge" title="${holiday}">${holiday}</span>`;
+    inner += `</div>`;
+
+    if (!weekend && !holiday) {
+      // Sort: absents (wfh/conge) on top, presents at bottom
+      const absents  = TEAM.map((p,i) => ({p, i, st: getStatus(i, viewYear, viewMonth, day)})).filter(x => x.st === 'conge');
+      const presents = TEAM.map((p,i) => ({p, i, st: getStatus(i, viewYear, viewMonth, day)})).filter(x => x.st !== 'conge');
+
+      // Absent chips (top)
+      if (absents.length) {
+        inner += `<div class="absent-section">`;
+        absents.forEach(({p, i, st}) => {
+          const cfg = STATUS_CONFIG[st];
+          inner += `<div class="person-chip ${cfg.cls}" onclick="cycleStatus(${i},${viewYear},${viewMonth},${day})" title="${p} — ${cfg.label} (clic pour changer)">${cfg.short} ${p}</div>`;
+        });
+        inner += `</div>`;
+        if (presents.length) inner += `<div class="present-divider"></div>`;
+      }
+
+      // Present chips (bottom)
+      if (presents.length) {
+        inner += `<div class="present-section">`;
+        presents.forEach(({p, i, st}) => {
+          const cfg = STATUS_CONFIG[st];
+          inner += `<div class="person-chip ${cfg.cls}" onclick="cycleStatus(${i},${viewYear},${viewMonth},${day})" title="${p} — ${cfg.label} (clic pour changer)">${cfg.short} ${p}</div>`;
+        });
+        inner += `</div>`;
+      }
+    } else if (holiday) {
+      // On holiday : show all as holiday
+      inner += `<div class="absent-section">`;
+      TEAM.forEach((p,i) => {
+        inner += `<div class="person-chip" style="background:var(--holiday-bg);color:#6d28d9;border:1px solid #c4b5fd;font-size:10px;font-weight:600;border-radius:5px;padding:2px 5px;">🎌 ${p}</div>`;
+      });
+      inner += `</div>`;
+    }
+
+    html += `<div class="${cellClass}">${inner}</div>`;
+  }
+  html += `</div>`;
+  document.getElementById('calendar-grid').innerHTML = html;
+}
+
+function renderWeekView() {
+  const holidays = getHolidays(today.getFullYear());
+  const dow = today.getDay() === 0 ? 6 : today.getDay() - 1;
+  const mondayDate = today.getDate() - dow;
+  const weekDays = [];
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(today.getFullYear(), today.getMonth(), mondayDate + i);
+    if (d.getMonth() !== today.getMonth()) continue;
+    weekDays.push(d.getDate());
+  }
+
+  let html = `<thead><tr><th>Équipe</th>`;
+  weekDays.forEach(d => {
+    const isT = d === today.getDate();
+    html += `<th class="${isT?'today-col':''}">${DAYS_FR[weekDays.indexOf(d)]} ${d}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  TEAM.forEach((p, i) => {
+    html += `<tr><td class="person-name">${p}</td>`;
+    weekDays.forEach(d => {
+      const dk = dateKey(today.getFullYear(), today.getMonth(), d);
+      const holiday = holidays[dk];
+      let badge = '';
+      if (holiday) {
+        badge = `<span class="status-badge badge-holiday">🎌 Férié</span>`;
+      } else {
+        const st = getStatus(i, today.getFullYear(), today.getMonth(), d);
+        const cfg = STATUS_CONFIG[st];
+        badge = `<span class="status-badge ${cfg.badge}">${cfg.short} ${cfg.label}</span>`;
+      }
+      html += `<td>${badge}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody>`;
+  document.getElementById('week-table').innerHTML = html;
+}
+
+function renderStats() {
+  const holidays = getHolidays(viewYear);
+  const totalDays = daysInMonth(viewYear, viewMonth);
+  let workDays = 0;
+  for (let d = 1; d <= totalDays; d++) {
+    const dk = dateKey(viewYear, viewMonth, d);
+    if (!isWeekend(viewYear, viewMonth, d) && !holidays[dk]) workDays++;
+  }
+
+  // Count for active person
+  let cPresent = 0, cWfh = 0, cConge = 0;
+  for (let d = 1; d <= totalDays; d++) {
+    const dk = dateKey(viewYear, viewMonth, d);
+    if (!isWeekend(viewYear, viewMonth, d) && !holidays[dk]) {
+      const st = getStatus(activePerson, viewYear, viewMonth, d);
+      if (st === 'present') cPresent++;
+      else if (st === 'wfh') cWfh++;
+      else if (st === 'conge') cConge++;
+    }
+  }
+
+  const html = `
+    <div class="stat-card">
+      <div class="stat-label">Jours ouvrés</div>
+      <div class="stat-value" style="color:var(--text)">${workDays}</div>
+      <div class="stat-sub">${MONTHS_FR[viewMonth]}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Présentiel · ${TEAM[activePerson]}</div>
+      <div class="stat-value" style="color:var(--present)">${cPresent}</div>
+      <div class="stat-sub">jours sur site</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">WFH · ${TEAM[activePerson]}</div>
+      <div class="stat-value" style="color:var(--wfh)">${cWfh}</div>
+      <div class="stat-sub">jours à domicile</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Congés · ${TEAM[activePerson]}</div>
+      <div class="stat-value" style="color:var(--conge)">${cConge}</div>
+      <div class="stat-sub">jours d'absence</div>
+    </div>
+  `;
+  document.getElementById('stats-bar').innerHTML = html;
+}
+
+function prevMonth() {
+  if (viewMonth === 0) { viewMonth = 11; viewYear--; } else viewMonth--;
+  renderAll();
+}
+function nextMonth() {
+  if (viewMonth === 11) { viewMonth = 0; viewYear++; } else viewMonth++;
+  renderAll();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadData(); // async — charge depuis SharePoint puis renderAll()
+</script>
+</body>
+</html>
