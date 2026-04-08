@@ -51,9 +51,8 @@
   .calendar-wrapper {
     max-width: 1100px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 0;
+    display: flex;
+    flex-direction: row;
     background: var(--surface);
     border-radius: 16px;
     border: 1px solid var(--border);
@@ -63,6 +62,9 @@
 
   /* ── COLONNE GAUCHE ASTREINTE ── */
   .aside-col {
+    flex: 0 0 82px;
+    width: 82px;
+    min-width: 82px;
     display: flex;
     flex-direction: column;
     border-right: 2px solid var(--border);
@@ -101,7 +103,7 @@
   }
   .aside-week-cell:last-child { border-bottom: none; }
 
-  /* Bouton agent de garde */
+  /* Bouton personne en charge */
   .guard-btn {
     width: 100%;
     border-radius: 8px;
@@ -129,7 +131,7 @@
   .guard-btn.p2 { background: #fff0f0; color: #b91c1c; border: 2px solid var(--guard); }
 
   /* ── CALENDRIER ── */
-  .calendar-col { overflow: hidden; }
+  .calendar-col { flex: 1; min-width: 0; overflow: hidden; }
   .calendar-head { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--surface2); border-bottom: 1px solid var(--border); }
   .calendar-head-cell { text-align: center; padding: 10px 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); font-family: 'DM Mono', monospace; }
   .calendar-head-cell.weekend { color: var(--weekend-text); }
@@ -159,7 +161,7 @@
   .chip-conge   { background: var(--conge-bg);   color: #b91c1c; border: 1px solid #fecaca; }
   .chip-present { background: var(--present-bg); color: #0369a1; border: 1px solid #bae6fd; }
 
-  /* Liseré rouge pour l'agent de garde */
+  /* Liseré rouge pour l'personne en charge */
   .person-chip.is-guard {
     border: 2px solid var(--guard-ring) !important;
     box-shadow: 0 0 0 1px #fca5a5;
@@ -232,7 +234,7 @@
 
   <!-- COLONNE GAUCHE ASTREINTE -->
   <div class="aside-col">
-    <div class="aside-header">🛡️<br>Agent<br>garde</div>
+    <div class="aside-header">🛡️<br>En<br>charge</div>
     <div class="aside-rows" id="aside-rows"></div>
   </div>
 
@@ -246,7 +248,7 @@
 
 <div class="stats-bar" id="stats-bar"></div>
 
-<div class="instructions">Présence : clic sur un nom pour cycler Présentiel → WFH → Congés. Permanence : clic sur le bouton de semaine (colonne gauche) pour changer l'agent de garde. Le liseré rouge identifie l'agent sur le calendrier.</div>
+<div class="instructions">Présence : clic sur un nom pour cycler Présentiel → WFH → Congés. Permanence : clic sur le bouton de semaine (colonne gauche) pour changer l'personne en charge. Le liseré rouge identifie l'agent sur le calendrier.</div>
 
 <script>
 const TEAM = ['Thomas', 'Sandrine', 'Laurence'];
@@ -304,8 +306,17 @@ async function loadData() {
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const j = await r.json();
     if (j && typeof j==='object' && !j.init) {
-      planningData  = j.planning  || {};
-      astreinteData = j.astreinte || {};
+      // Migration : ancien format plat → nouveau format {planning, astreinte}
+      if (j.planning !== undefined) {
+        planningData  = j.planning  || {};
+        astreinteData = j.astreinte || {};
+      } else {
+        // Ancien format : toutes les clés sont des données de planning
+        planningData  = j;
+        astreinteData = {};
+        // Sauvegarder immédiatement dans le nouveau format
+        saveData();
+      }
     }
     setStatusUI('ok','✅ Synchronisé');
   } catch(e) {
@@ -438,7 +449,7 @@ function renderAll() {
     const holiday = holidays[dk];
     const isToday = today.getFullYear()===viewYear && today.getMonth()===viewMonth && today.getDate()===day;
 
-    // Quel est l'agent de garde effectif pour ce jour ?
+    // Quel est l'personne en charge effectif pour ce jour ?
     const rowIdx   = getWeekRow(day, firstDay);
     const wKey     = weekKeys[rowIdx];
     const weekGuardIdx   = getGuard(wKey);
@@ -502,7 +513,7 @@ function renderAll() {
     const guardIdx = getGuard(wKey);
     const label   = guardIdx !== null ? TEAM[guardIdx] : '—';
     const btnCls  = guardIdx !== null ? `guard-btn p${guardIdx}` : 'guard-btn none';
-    const title   = guardIdx !== null ? `Agent de garde : ${TEAM[guardIdx]}\nClic pour changer` : 'Clic pour désigner l\'agent de garde';
+    const title   = guardIdx !== null ? `Personne en charge : ${TEAM[guardIdx]}\nClic pour changer` : 'Clic pour désigner l\'personne en charge';
     asideHtml += `
       <div class="aside-week-cell">
         <button class="${btnCls}" onclick="cycleGuard('${wKey}')" title="${title}">
