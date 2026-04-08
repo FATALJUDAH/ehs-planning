@@ -7,203 +7,96 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg: #f0f4f8;
-    --surface: #ffffff;
-    --surface2: #f8fafc;
-    --border: #e2e8f0;
-    --text: #1e293b;
-    --text-muted: #64748b;
-    --text-faint: #94a3b8;
-    --present: #0ea5e9;
-    --present-bg: #e0f2fe;
-    --wfh: #f59e0b;
-    --wfh-bg: #fef3c7;
-    --conge: #ef4444;
-    --conge-bg: #fee2e2;
-    --holiday: #8b5cf6;
-    --holiday-bg: #ede9fe;
-    --weekend-text: #94a3b8;
-    --today-ring: #0ea5e9;
-    --guard: #ef4444;
-    --guard-ring: #ef4444;
+    --bg:#f0f4f8;--surface:#fff;--surface2:#f8fafc;--border:#e2e8f0;
+    --text:#1e293b;--text-muted:#64748b;--text-faint:#94a3b8;
+    --present:#0ea5e9;--present-bg:#e0f2fe;
+    --wfh:#f59e0b;--wfh-bg:#fef3c7;
+    --conge:#ef4444;--conge-bg:#fee2e2;
+    --holiday:#8b5cf6;--holiday-bg:#ede9fe;
+    --weekend-text:#94a3b8;--today-ring:#0ea5e9;
+    --guard:#ef4444;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:24px 16px;}
 
-  /* ── HEADER ── */
-  .header { max-width: 1100px; margin: 0 auto 20px; }
-  .header h1 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
-  .header p  { font-size: 12px; color: var(--text-muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
+  .header{max-width:1100px;margin:0 auto 20px;}
+  .header h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.5px;}
+  .header p{font-size:12px;color:var(--text-muted);margin-top:2px;font-family:'DM Mono',monospace;}
 
-  /* ── NAV ── */
-  .nav-bar { max-width: 1100px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; gap: 16px; }
-  .nav-month { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); min-width: 180px; text-align: center; }
-  .nav-btn { width: 34px; height: 34px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); font-size: 16px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-  .nav-btn:hover { border-color: var(--present); color: var(--present); }
+  .nav-bar{max-width:1100px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;gap:16px;}
+  .nav-month{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;min-width:180px;text-align:center;}
+  .nav-btn{width:34px;height:34px;border-radius:999px;border:2px solid var(--border);background:var(--surface);font-size:16px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:all .15s;}
+  .nav-btn:hover{border-color:var(--present);color:var(--present);}
 
-  /* ── LEGEND ── */
-  .legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; max-width: 1100px; margin: 0 auto 14px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); }
-  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
-  .legend-guard { border: 2px solid var(--guard); color: var(--guard); background: #fff5f5; }
+  .legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;max-width:1100px;margin:0 auto 14px;}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);}
+  .legend-dot{width:9px;height:9px;border-radius:50%;}
+  .legend-guard{border:2px solid var(--guard);color:var(--guard);background:#fff5f5;}
 
-  /* ── WRAPPER CALENDRIER + COLONNE GAUCHE ── */
-  .calendar-wrapper {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: row;
-    background: var(--surface);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  }
+  /* GRILLE : col permanence + 7 jours */
+  .calendar{max-width:1100px;margin:0 auto;background:var(--surface);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);}
 
-  /* ── COLONNE GAUCHE ASTREINTE ── */
-  .aside-col {
-    flex: 0 0 82px;
-    width: 82px;
-    min-width: 82px;
-    display: flex;
-    flex-direction: column;
-    border-right: 2px solid var(--border);
-    background: var(--surface2);
-  }
-  .aside-header {
-    height: 41px; /* même hauteur que calendar-head */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-faint);
-    font-family: 'DM Mono', monospace;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface2);
-    padding: 0 4px;
-    text-align: center;
-    line-height: 1.2;
-  }
-  .aside-rows {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
-  .aside-week-cell {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid var(--border);
-    padding: 4px 3px;
-    min-height: 110px;
-  }
-  .aside-week-cell:last-child { border-bottom: none; }
+  .cal-grid{display:grid;grid-template-columns:82px repeat(7,1fr);}
 
-  /* Bouton personne en charge */
-  .guard-btn {
-    width: 100%;
-    border-radius: 8px;
-    border: none;
-    padding: 6px 3px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-    line-height: 1.3;
-    word-break: break-word;
-  }
-  .guard-btn:hover { transform: scale(1.05); opacity: 0.85; }
-  .guard-btn.none {
-    background: var(--surface);
-    color: var(--text-faint);
-    border: 1px dashed var(--border);
-    font-weight: 400;
-    font-size: 9px;
-  }
-  .guard-btn.p0 { background: #fff0f0; color: #b91c1c; border: 2px solid var(--guard); }
-  .guard-btn.p1 { background: #fff0f0; color: #b91c1c; border: 2px solid var(--guard); }
-  .guard-btn.p2 { background: #fff0f0; color: #b91c1c; border: 2px solid var(--guard); }
+  /* En-têtes */
+  .ch-perm{background:var(--surface2);border-bottom:1px solid var(--border);border-right:2px solid var(--border);display:flex;align-items:center;justify-content:center;padding:8px 4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);font-family:'DM Mono',monospace;text-align:center;line-height:1.3;}
+  .ch-day{background:var(--surface2);border-bottom:1px solid var(--border);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:10px 4px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);font-family:'DM Mono',monospace;}
+  .ch-day:last-child{border-right:none;}
+  .ch-day.weekend{color:var(--weekend-text);}
 
-  /* ── CALENDRIER ── */
-  .calendar-col { flex: 1; min-width: 0; overflow: hidden; }
-  .calendar-head { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--surface2); border-bottom: 1px solid var(--border); }
-  .calendar-head-cell { text-align: center; padding: 10px 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); font-family: 'DM Mono', monospace; }
-  .calendar-head-cell.weekend { color: var(--weekend-text); }
-  .calendar-body { display: grid; grid-template-columns: repeat(7, 1fr); }
+  /* Cellule permanence semaine */
+  .perm-cell{border-right:2px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;padding:4px 3px;}
+  .perm-cell:last-of-type{border-bottom:none;}
 
-  /* ── CELLULES JOURS ── */
-  .day-cell { min-height: 110px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6px; display: flex; flex-direction: column; gap: 3px; }
-  .day-cell:nth-child(7n) { border-right: none; }
-  .day-cell.empty        { background: var(--surface2); }
-  .day-cell.weekend-day  { background: #f8fafc; }
-  .day-cell.holiday-day  { background: var(--holiday-bg); }
-  .day-cell.today        { box-shadow: inset 0 0 0 2px var(--today-ring); }
+  .guard-btn{width:100%;border-radius:8px;padding:6px 3px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;line-height:1.4;word-break:break-word;border:none;}
+  .guard-btn:hover{transform:scale(1.05);opacity:.85;}
+  .guard-btn.none{background:var(--surface);color:var(--text-faint);border:1px dashed var(--border);font-weight:400;font-size:9px;}
+  .guard-btn.active{background:#fff0f0;color:#b91c1c;border:2px solid var(--guard);}
 
-  .day-number { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 2px; display: flex; align-items: center; gap: 5px; }
-  .day-number.today-num   { color: var(--present); }
-  .day-number.weekend-num { color: var(--weekend-text); }
-  .holiday-badge { font-size: 9px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--holiday); background: var(--holiday-bg); border: 1px solid var(--holiday); border-radius: 4px; padding: 1px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
+  /* Cellules jours */
+  .day-cell{min-height:110px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:6px;display:flex;flex-direction:column;gap:3px;position:relative;}
+  .day-cell:nth-child(8n){border-right:none;} /* 8 = 1 perm + 7 jours, la 8e col = dimanche */
+  .day-cell.empty{background:var(--surface2);}
+  .day-cell.weekend-day{background:#f8fafc;}
+  .day-cell.holiday-day{background:var(--holiday-bg);}
+  .day-cell.today{box-shadow:inset 0 0 0 2px var(--today-ring);}
 
-  .absent-section  { display: flex; flex-direction: column; gap: 2px; }
-  .present-section { display: flex; flex-direction: column; gap: 2px; margin-top: auto; }
-  .present-divider { height: 1px; background: var(--border); margin: 2px 0; }
+  .day-number{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:2px;display:flex;align-items:center;gap:5px;}
+  .day-number.today-num{color:var(--present);}
+  .day-number.weekend-num{color:var(--weekend-text);}
+  .holiday-badge{font-size:9px;font-weight:700;font-family:'DM Mono',monospace;color:var(--holiday);background:var(--holiday-bg);border:1px solid var(--holiday);border-radius:4px;padding:1px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;}
 
-  /* Chips présence */
-  .person-chip { display: flex; align-items: center; gap: 4px; border-radius: 5px; padding: 2px 5px; font-size: 10px; font-weight: 600; cursor: pointer; transition: opacity 0.1s, transform 0.1s; user-select: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .person-chip:hover { opacity: 0.8; transform: scale(1.03); }
-  .chip-wfh     { background: var(--wfh-bg);     color: #b45309; border: 1px solid #fde68a; }
-  .chip-conge   { background: var(--conge-bg);   color: #b91c1c; border: 1px solid #fecaca; }
-  .chip-present { background: var(--present-bg); color: #0369a1; border: 1px solid #bae6fd; }
+  .absent-section{display:flex;flex-direction:column;gap:2px;}
+  .present-section{display:flex;flex-direction:column;gap:2px;margin-top:auto;}
+  .present-divider{height:1px;background:var(--border);margin:2px 0;}
 
-  /* Liseré rouge pour l'personne en charge */
-  .person-chip.is-guard {
-    border: 2px solid var(--guard-ring) !important;
-    box-shadow: 0 0 0 1px #fca5a5;
-  }
-
-  /* ── STATS ── */
-  .stats-bar { max-width: 1100px; margin: 14px auto 0; display: flex; gap: 10px; flex-wrap: wrap; }
-  .stat-card { flex: 1; min-width: 130px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); padding: 12px 16px; display: flex; flex-direction: column; gap: 2px; }
-  .stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); font-family: 'DM Mono', monospace; }
-  .stat-value { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; }
-  .stat-sub { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
-
-  .instructions { max-width: 1100px; margin: 12px auto 0; font-size: 11px; color: var(--text-faint); text-align: center; font-family: 'DM Mono', monospace; }
+  .person-chip{display:flex;align-items:center;gap:4px;border-radius:5px;padding:2px 5px;font-size:10px;font-weight:600;cursor:pointer;transition:opacity .1s,transform .1s;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .person-chip:hover{opacity:.8;transform:scale(1.03);}
+  .chip-wfh{background:var(--wfh-bg);color:#b45309;border:1px solid #fde68a;}
+  .chip-conge{background:var(--conge-bg);color:#b91c1c;border:1px solid #fecaca;}
+  .chip-present{background:var(--present-bg);color:#0369a1;border:1px solid #bae6fd;}
+  .person-chip.is-guard{border:2px solid var(--guard)!important;box-shadow:0 0 0 1px #fca5a5;}
 
   /* Bouton réattribution journalière */
-  .day-guard-btn {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-faint);
-    font-size: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-    opacity: 0.5;
-    padding: 0;
-    line-height: 1;
-  }
-  .day-guard-btn:hover { opacity: 1; border-color: var(--guard); color: var(--guard); background: #fff5f5; transform: rotate(30deg); }
-  .day-guard-btn.active { opacity: 1; border-color: var(--guard); color: var(--guard); background: #fff5f5; }
-  .day-cell { position: relative; }
-    .aside-col { display: none; }
-    .calendar-wrapper { grid-template-columns: 1fr; }
-    .day-cell { min-height: 70px; }
-    .person-chip { font-size: 8px; padding: 1px 3px; }
+  .day-guard-btn{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text-faint);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;opacity:.4;padding:0;}
+  .day-guard-btn:hover{opacity:1;border-color:var(--guard);color:var(--guard);background:#fff5f5;transform:rotate(30deg);}
+  .day-guard-btn.active{opacity:1;border-color:var(--guard);color:var(--guard);background:#fff5f5;}
+
+  /* Stats */
+  .stats-bar{max-width:1100px;margin:14px auto 0;display:flex;gap:10px;flex-wrap:wrap;}
+  .stat-card{flex:1;min-width:130px;background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:12px 16px;display:flex;flex-direction:column;gap:2px;}
+  .stat-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);font-family:'DM Mono',monospace;}
+  .stat-value{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+  .stat-sub{font-size:11px;color:var(--text-faint);margin-top:2px;}
+
+  .instructions{max-width:1100px;margin:12px auto 0;font-size:11px;color:var(--text-faint);text-align:center;font-family:'DM Mono',monospace;}
+
+  @media(max-width:640px){
+    .cal-grid{grid-template-columns:52px repeat(7,1fr);}
+    .perm-cell,.ch-perm{font-size:8px;}
+    .guard-btn{font-size:8px;padding:4px 2px;}
+    .day-cell{min-height:65px;}
+    .person-chip{font-size:8px;padding:1px 3px;}
   }
 </style>
 </head>
@@ -221,66 +114,48 @@
 </div>
 
 <div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:var(--present)"></div> Présentiel (défaut)</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--wfh)"></div> Work From Home</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--conge)"></div> Congés / Absence</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div> Férié Genève</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--present)"></div>Présentiel (défaut)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--wfh)"></div>Work From Home</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--conge)"></div>Congés / Absence</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div>Férié Genève</div>
   <div class="legend-item legend-guard">🛡️ Permanence EHS</div>
   <div class="legend-item" style="font-size:10px;color:var(--text-faint)">Clic = changer statut · Colonne gauche = permanence</div>
 </div>
 
-<!-- WRAPPER : colonne gauche + calendrier -->
-<div class="calendar-wrapper">
-
-  <!-- COLONNE GAUCHE ASTREINTE -->
-  <div class="aside-col">
-    <div class="aside-header">🛡️<br>En<br>charge</div>
-    <div class="aside-rows" id="aside-rows"></div>
-  </div>
-
-  <!-- CALENDRIER -->
-  <div class="calendar-col">
-    <div class="calendar-head" id="calendar-head"></div>
-    <div class="calendar-body" id="calendar-body"></div>
-  </div>
-
+<div class="calendar">
+  <div class="cal-grid" id="cal-grid"></div>
 </div>
 
 <div class="stats-bar" id="stats-bar"></div>
-
-<div class="instructions">Présence : clic sur un nom pour cycler Présentiel → WFH → Congés. Permanence : clic sur le bouton de semaine (colonne gauche) pour changer l'personne en charge. Le liseré rouge identifie l'agent sur le calendrier.</div>
+<div class="instructions">Présence : clic sur un nom pour cycler Présentiel → WFH → Congés. Permanence : clic sur le bouton semaine (colonne gauche) pour changer la personne en charge. Le liseré rouge identifie la personne en charge sur le calendrier.</div>
 
 <script>
-const TEAM = ['Thomas', 'Sandrine', 'Laurence'];
-
-const STATUS_CYCLE = ['present', 'wfh', 'conge'];
-const STATUS_CONFIG = {
-  present: { label: 'Présentiel', short: '🏢', cls: 'chip-present' },
-  wfh:     { label: 'WFH',        short: '🏠', cls: 'chip-wfh' },
-  conge:   { label: 'Congés',     short: '🌴', cls: 'chip-conge' },
+const TEAM=['Thomas','Sandrine','Laurence'];
+const STATUS_CYCLE=['present','wfh','conge'];
+const STATUS_CONFIG={
+  present:{label:'Présentiel',short:'🏢',cls:'chip-present'},
+  wfh:    {label:'WFH',       short:'🏠',cls:'chip-wfh'},
+  conge:  {label:'Congés',    short:'🌴',cls:'chip-conge'},
 };
-const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-const DAYS_FR   = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const MONTHS_FR=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DAYS_FR=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 
-const JSONBIN_ID  = '69aea4b643b1c97be9c4698b';
-const JSONBIN_KEY = '$2a$10$PFpk.wY3oJo03R2S5zUFnOMbY5xGVGi3DwAQcRfV3DY4LOt43aL02';
-const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
+const JSONBIN_ID ='69aea4b643b1c97be9c4698b';
+const JSONBIN_KEY='$2a$10$PFpk.wY3oJo03R2S5zUFnOMbY5xGVGi3DwAQcRfV3DY4LOt43aL02';
+const JSONBIN_URL=`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
-const today = new Date();
-let viewYear  = today.getFullYear();
-let viewMonth = today.getMonth();
-let planningData  = {};  // présence
-let astreinteData = {};  // astreinte par semaine : clé = "wguard-Y-M-weekIdx" → personIdx
-let isSaving = false;
-let saveQueue = false;
+const today=new Date();
+let viewYear=today.getFullYear(),viewMonth=today.getMonth();
+let planningData={},astreinteData={};
+let isSaving=false,saveQueue=false;
 
-// ── JOURS FÉRIÉS GENÈVE ──────────────────────────────────────────────────────
-function getHolidays(year) {
-  const h = {};
-  const add = (m,d,l) => { h[`${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`]=l; };
-  add(1,1,'Nouvel An'); add(1,2,'Restauration GE'); add(5,1,'Fête du Travail');
-  add(8,1,'Fête Nationale'); add(12,25,'Noël'); add(12,31,'St-Sylvestre');
-  let fs=new Date(year,8,1).getDay(); fs=fs===0?1:1+(7-fs);
+// ── FÉRIÉS GENÈVE ────────────────────────────────────────────────────────────
+function getHolidays(year){
+  const h={};
+  const add=(m,d,l)=>{h[`${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`]=l;};
+  add(1,1,'Nouvel An');add(1,2,'Restauration GE');add(5,1,'Fête du Travail');
+  add(8,1,'Fête Nationale');add(12,25,'Noël');add(12,31,'St-Sylvestre');
+  let fs=new Date(year,8,1).getDay();fs=fs===0?1:1+(7-fs);
   const j=new Date(year,8,fs+4);
   h[`${year}-${String(j.getMonth()+1).padStart(2,'0')}-${String(j.getDate()).padStart(2,'0')}`]='Jeûne genevois';
   const a=year%19,b=Math.floor(year/100),c=year%100;
@@ -290,273 +165,220 @@ function getHolidays(year) {
   const mo=Math.floor((h2+l-7*m2+114)/31),dy=((h2+l-7*m2+114)%31)+1;
   const ea=new Date(year,mo-1,dy);
   [[-2,'Vendredi Saint'],[0,'Pâques'],[1,'Lundi de Pâques'],[39,'Ascension'],[49,'Pentecôte'],[50,'Lundi Pentecôte']].forEach(([off,lbl])=>{
-    const d3=new Date(ea); d3.setDate(d3.getDate()+off);
+    const d3=new Date(ea);d3.setDate(d3.getDate()+off);
     h[`${year}-${String(d3.getMonth()+1).padStart(2,'0')}-${String(d3.getDate()).padStart(2,'0')}`]=lbl;
   });
   return h;
 }
 
 // ── JSONBIN ──────────────────────────────────────────────────────────────────
-async function loadData() {
+async function loadData(){
   setStatusUI('sync','⏳ Chargement…');
-  try {
-    const r = await fetch(`${JSONBIN_URL}/latest`, {
-      headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
-    });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const j = await r.json();
-    if (j && typeof j==='object' && !j.init) {
-      // Migration : ancien format plat → nouveau format {planning, astreinte}
-      if (j.planning !== undefined) {
-        planningData  = j.planning  || {};
-        astreinteData = j.astreinte || {};
+  try{
+    const r=await fetch(`${JSONBIN_URL}/latest`,{headers:{'X-Master-Key':JSONBIN_KEY,'X-Bin-Meta':'false'}});
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j=await r.json();
+    if(j&&typeof j==='object'&&!j.init){
+      if(j.planning!==undefined){
+        planningData=j.planning||{};astreinteData=j.astreinte||{};
       } else {
-        // Ancien format : toutes les clés sont des données de planning
-        planningData  = j;
-        astreinteData = {};
-        // Sauvegarder immédiatement dans le nouveau format
+        // Migration ancien format plat → nouveau format
+        planningData=j;astreinteData={};
         saveData();
       }
     }
     setStatusUI('ok','✅ Synchronisé');
-  } catch(e) {
+  } catch(e){
     setStatusUI('warn','⚠️ Hors ligne — données locales');
-    try { const d=localStorage.getItem('ehs_v3'); if(d){const p=JSON.parse(d);planningData=p.planning||{};astreinteData=p.astreinte||{};} } catch(_){}
+    try{const d=localStorage.getItem('ehs_v3');if(d){const p=JSON.parse(d);planningData=p.planning||{};astreinteData=p.astreinte||{};}}catch(_){}
   }
   renderAll();
 }
 
-async function saveData() {
-  const payload = { planning: planningData, astreinte: astreinteData };
-  try { localStorage.setItem('ehs_v3', JSON.stringify(payload)); } catch(_){}
-  if (isSaving) { saveQueue=true; return; }
-  isSaving=true; setStatusUI('sync','💾 Sauvegarde…');
-  try {
-    const r = await fetch(JSONBIN_URL, { method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY}, body:JSON.stringify(payload) });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+async function saveData(){
+  const payload={planning:planningData,astreinte:astreinteData};
+  try{localStorage.setItem('ehs_v3',JSON.stringify(payload));}catch(_){}
+  if(isSaving){saveQueue=true;return;}
+  isSaving=true;setStatusUI('sync','💾 Sauvegarde…');
+  try{
+    const r=await fetch(JSONBIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY},body:JSON.stringify(payload)});
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
     setStatusUI('ok','✅ Synchronisé');
-  } catch(e) {
-    setStatusUI('warn','⚠️ Sauvegarde échouée');
-  } finally {
-    isSaving=false;
-    if (saveQueue) { saveQueue=false; saveData(); }
-  }
+  } catch(e){setStatusUI('warn','⚠️ Sauvegarde échouée');}
+  finally{isSaving=false;if(saveQueue){saveQueue=false;saveData();}}
 }
 
-function setStatusUI(type,msg) {
-  const el=document.getElementById('sync-status');
-  if(!el) return;
+function setStatusUI(type,msg){
+  const el=document.getElementById('sync-status');if(!el)return;
   el.textContent=msg;
   el.style.color=type==='ok'?'#16a34a':type==='warn'?'#b45309':'#0369a1';
 }
 
 // ── PRÉSENCE ─────────────────────────────────────────────────────────────────
-function getStatus(person, year, month, day) {
-  return planningData[`${year}-${month}-${person}-${day}`] || 'present';
-}
-function setStatusVal(person, year, month, day, status) {
+function getStatus(person,year,month,day){return planningData[`${year}-${month}-${person}-${day}`]||'present';}
+function setStatusVal(person,year,month,day,status){
   const k=`${year}-${month}-${person}-${day}`;
-  if (status==='present') delete planningData[k]; else planningData[k]=status;
+  if(status==='present')delete planningData[k];else planningData[k]=status;
   saveData();
 }
-function cycleStatus(person, year, month, day) {
+function cycleStatus(person,year,month,day){
   const cur=getStatus(person,year,month,day);
-  setStatusVal(person,year,month,day, STATUS_CYCLE[(STATUS_CYCLE.indexOf(cur)+1)%STATUS_CYCLE.length]);
+  setStatusVal(person,year,month,day,STATUS_CYCLE[(STATUS_CYCLE.indexOf(cur)+1)%STATUS_CYCLE.length]);
   renderAll();
 }
 
-// ── ASTREINTE PAR SEMAINE ────────────────────────────────────────────────────
-// Clé : "wguard-YEAR-MONTH-weekIdx" (weekIdx = index de la ligne semaine dans ce mois)
-function getGuard(weekKey) {
-  const v = astreinteData[weekKey];
-  return (v !== undefined && v !== null) ? v : null;
-}
-function cycleGuard(weekKey) {
-  const cur = getGuard(weekKey);
-  const next = cur === null ? 0 : cur === (TEAM.length-1) ? null : cur+1;
-  if (next === null) delete astreinteData[weekKey];
-  else astreinteData[weekKey] = next;
-  saveData();
-  renderAll();
+// ── PERMANENCE SEMAINE ───────────────────────────────────────────────────────
+function getGuard(wKey){const v=astreinteData[wKey];return(v!==undefined&&v!==null)?v:null;}
+function cycleGuard(wKey){
+  const cur=getGuard(wKey);
+  const next=cur===null?0:cur===(TEAM.length-1)?null:cur+1;
+  if(next===null)delete astreinteData[wKey];else astreinteData[wKey]=next;
+  saveData();renderAll();
 }
 
-// ── RÉATTRIBUTION JOURNALIÈRE ────────────────────────────────────────────────
-// Surcharge du guard pour un jour précis : clé "dguard-Y-M-D" → personIdx ou null (= suit la semaine)
-function getDayGuard(year, month, day) {
-  const v = astreinteData[`dguard-${year}-${month}-${day}`];
-  return (v !== undefined && v !== null) ? v : null;
+// ── PERMANENCE JOURNALIÈRE (surcharge) ───────────────────────────────────────
+function getDayGuard(year,month,day){const v=astreinteData[`dguard-${year}-${month}-${day}`];return(v!==undefined&&v!==null)?v:null;}
+function cycleDayGuard(year,month,day,weekGuardIdx){
+  const k=`dguard-${year}-${month}-${day}`;
+  const cur=getDayGuard(year,month,day);
+  const base=cur!==null?cur:(weekGuardIdx!==null?weekGuardIdx:-1);
+  const next=(base+1)%TEAM.length;
+  if(next===weekGuardIdx)delete astreinteData[k];else astreinteData[k]=next;
+  saveData();renderAll();
 }
-function cycleDayGuard(year, month, day, weekGuardIdx) {
-  const k = `dguard-${year}-${month}-${day}`;
-  const cur = getDayGuard(year, month, day);
-  // Si pas de surcharge, on part du guard de semaine (ou 0 si aucun)
-  const base = cur !== null ? cur : (weekGuardIdx !== null ? weekGuardIdx : -1);
-  const next = (base + 1) % TEAM.length;
-  // Si on revient au guard de semaine → on supprime la surcharge (retour au comportement semaine)
-  if (next === weekGuardIdx) delete astreinteData[k];
-  else astreinteData[k] = next;
-  saveData();
-  renderAll();
+function getEffectiveGuard(year,month,day,weekGuardIdx){
+  const d=getDayGuard(year,month,day);return d!==null?d:weekGuardIdx;
 }
 
-// Résoudre le guard effectif d'un jour (surcharge jour > semaine)
-function getEffectiveGuard(year, month, day, weekGuardIdx) {
-  const dayOverride = getDayGuard(year, month, day);
-  return dayOverride !== null ? dayOverride : weekGuardIdx;
-}
-function isWeekend(year,month,day){ const d=new Date(year,month,day).getDay(); return d===0||d===6; }
-function getFirstDayOfWeek(year,month){ const d=new Date(year,month,1).getDay(); return d===0?6:d-1; }
-function daysInMonth(year,month){ return new Date(year,month+1,0).getDate(); }
-function pad2(n){ return String(n).padStart(2,'0'); }
-function dateKey(year,month,day){ return `${year}-${pad2(month+1)}-${pad2(day)}`; }
-
-// Calcule le numéro de ligne de semaine (0-based) pour un jour donné dans la grille du mois
-function getWeekRow(day, firstDay) {
-  return Math.floor((day - 1 + firstDay) / 7);
-}
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function isWeekend(year,month,day){const d=new Date(year,month,day).getDay();return d===0||d===6;}
+function getFirstDayOfWeek(year,month){const d=new Date(year,month,1).getDay();return d===0?6:d-1;}
+function daysInMonth(year,month){return new Date(year,month+1,0).getDate();}
+function pad2(n){return String(n).padStart(2,'0');}
+function dateKey(year,month,day){return`${year}-${pad2(month+1)}-${pad2(day)}`;}
+function getWeekRow(day,firstDay){return Math.floor((day-1+firstDay)/7);}
 
 // ── RENDER ───────────────────────────────────────────────────────────────────
-function renderAll() {
-  const holidays  = getHolidays(viewYear);
-  const totalDays = daysInMonth(viewYear, viewMonth);
-  const firstDay  = getFirstDayOfWeek(viewYear, viewMonth);
+function renderAll(){
+  const holidays=getHolidays(viewYear);
+  const totalDays=daysInMonth(viewYear,viewMonth);
+  const firstDay=getFirstDayOfWeek(viewYear,viewMonth);
+  const totalRows=Math.ceil((firstDay+totalDays)/7);
 
-  document.getElementById('nav-month-label').textContent = `${MONTHS_FR[viewMonth]} ${viewYear}`;
+  document.getElementById('nav-month-label').textContent=`${MONTHS_FR[viewMonth]} ${viewYear}`;
 
-  // Nombre total de lignes semaine dans la grille
-  const totalCells = firstDay + totalDays;
-  const totalRows  = Math.ceil(totalCells / 7);
+  // Clés semaine
+  const weekKeys=[];
+  for(let r=0;r<totalRows;r++) weekKeys.push(`wguard-${viewYear}-${viewMonth}-${r}`);
 
-  // Construire le tableau des clés de semaine par ligne
-  // weekKey[rowIdx] = "wguard-Y-M-rowIdx"
-  const weekKeys = [];
-  for (let r = 0; r < totalRows; r++) {
-    weekKeys.push(`wguard-${viewYear}-${viewMonth}-${r}`);
-  }
+  let html='';
 
-  // ── En-têtes ──
-  let headHtml = '';
-  DAYS_FR.forEach((d,i) => { headHtml += `<div class="calendar-head-cell${i>=5?' weekend':''}">${d}</div>`; });
-  document.getElementById('calendar-head').innerHTML = headHtml;
+  // ── En-têtes (8 colonnes) ──
+  html+=`<div class="ch-perm">🛡️<br>En<br>charge</div>`;
+  DAYS_FR.forEach((d,i)=>{html+=`<div class="ch-day${i>=5?' weekend':''}">${d}</div>`;});
 
-  // ── Corps calendrier ──
-  let bodyHtml = '';
-  for (let e = 0; e < firstDay; e++) bodyHtml += `<div class="day-cell empty"></div>`;
+  // ── Lignes semaine ──
+  for(let row=0;row<totalRows;row++){
+    const wKey=weekKeys[row];
+    const guardIdx=getGuard(wKey);
+    const label=guardIdx!==null?TEAM[guardIdx]:'—';
+    const btnCls=guardIdx!==null?'guard-btn active':'guard-btn none';
 
-  for (let day = 1; day <= totalDays; day++) {
-    const weekend = isWeekend(viewYear, viewMonth, day);
-    const dk      = dateKey(viewYear, viewMonth, day);
-    const holiday = holidays[dk];
-    const isToday = today.getFullYear()===viewYear && today.getMonth()===viewMonth && today.getDate()===day;
+    // Cellule permanence
+    html+=`<div class="perm-cell"><button class="${btnCls}" onclick="cycleGuard('${wKey}')" title="Clic pour changer la personne en charge">${guardIdx!==null?'🛡️<br>':''}<span>${label}</span></button></div>`;
 
-    // Quel est l'personne en charge effectif pour ce jour ?
-    const rowIdx   = getWeekRow(day, firstDay);
-    const wKey     = weekKeys[rowIdx];
-    const weekGuardIdx   = getGuard(wKey);
-    const effectiveGuard = getEffectiveGuard(viewYear, viewMonth, day, weekGuardIdx);
-    const hasDayOverride = getDayGuard(viewYear, viewMonth, day) !== null;
-
-    let cls = 'day-cell'+(weekend?' weekend-day':'')+(holiday?' holiday-day':'')+(isToday?' today':'');
-    let numCls = 'day-number'+(isToday?' today-num':'')+(weekend?' weekend-num':'');
-
-    let inner = `<div class="${numCls}">${day}`;
-    if (holiday) inner += `<span class="holiday-badge" title="${holiday}">${holiday}</span>`;
-    inner += `</div>`;
-
-    if (!weekend && !holiday) {
-      // Bouton de réattribution journalière (affiché si un guard de semaine est défini ou surcharge)
-      if (effectiveGuard !== null || weekGuardIdx !== null) {
-        const activeCls = hasDayOverride ? ' active' : '';
-        const tipName   = effectiveGuard !== null ? TEAM[effectiveGuard] : '—';
-        inner += `<button class="day-guard-btn${activeCls}" onclick="cycleDayGuard(${viewYear},${viewMonth},${day},${weekGuardIdx})" title="Permanence du jour : ${tipName}\nClic pour changer">⇄</button>`;
+    // 7 cellules jours
+    for(let col=0;col<7;col++){
+      const day=row*7+col-firstDay+1;
+      if(day<1||day>totalDays){
+        html+=`<div class="day-cell empty"></div>`;
+        continue;
       }
+      const weekend=isWeekend(viewYear,viewMonth,day);
+      const dk=dateKey(viewYear,viewMonth,day);
+      const holiday=holidays[dk];
+      const isToday=today.getFullYear()===viewYear&&today.getMonth()===viewMonth&&today.getDate()===day;
+      const weekGuardIdx=getGuard(wKey);
+      const effectiveGuard=getEffectiveGuard(viewYear,viewMonth,day,weekGuardIdx);
+      const hasDayOverride=getDayGuard(viewYear,viewMonth,day)!==null;
 
-      const absents  = TEAM.map((p,i) => ({p,i,st:getStatus(i,viewYear,viewMonth,day)})).filter(x=>x.st==='conge');
-      const presents = TEAM.map((p,i) => ({p,i,st:getStatus(i,viewYear,viewMonth,day)})).filter(x=>x.st!=='conge');
+      let cls='day-cell'+(weekend?' weekend-day':'')+(holiday?' holiday-day':'')+(isToday?' today':'');
+      let numCls='day-number'+(isToday?' today-num':'')+(weekend?' weekend-num':'');
 
-      if (absents.length) {
-        inner += `<div class="absent-section">`;
-        absents.forEach(({p,i,st}) => {
-          const cfg = STATUS_CONFIG[st];
-          const isGuard = (effectiveGuard === i) ? ' is-guard' : '';
-          inner += `<div class="person-chip ${cfg.cls}${isGuard}" onclick="cycleStatus(${i},${viewYear},${viewMonth},${day})" title="${p} — ${cfg.label}${isGuard?' 🛡️ Permanence':''}">${cfg.short} ${p}</div>`;
+      let inner=`<div class="${numCls}">${day}`;
+      if(holiday) inner+=`<span class="holiday-badge" title="${holiday}">${holiday}</span>`;
+      inner+=`</div>`;
+
+      if(!weekend&&!holiday){
+        // Bouton réattribution journalière
+        if(effectiveGuard!==null||weekGuardIdx!==null){
+          const activeCls=hasDayOverride?' active':'';
+          const tipName=effectiveGuard!==null?TEAM[effectiveGuard]:'—';
+          inner+=`<button class="day-guard-btn${activeCls}" onclick="cycleDayGuard(${viewYear},${viewMonth},${day},${weekGuardIdx})" title="Permanence du jour : ${tipName} — clic pour changer">⇄</button>`;
+        }
+        const absents=TEAM.map((p,i)=>({p,i,st:getStatus(i,viewYear,viewMonth,day)})).filter(x=>x.st==='conge');
+        const presents=TEAM.map((p,i)=>({p,i,st:getStatus(i,viewYear,viewMonth,day)})).filter(x=>x.st!=='conge');
+        if(absents.length){
+          inner+=`<div class="absent-section">`;
+          absents.forEach(({p,i,st})=>{
+            const cfg=STATUS_CONFIG[st];
+            const g=effectiveGuard===i?' is-guard':'';
+            inner+=`<div class="person-chip ${cfg.cls}${g}" onclick="cycleStatus(${i},${viewYear},${viewMonth},${day})">${cfg.short} ${p}</div>`;
+          });
+          inner+=`</div>`;
+          if(presents.length) inner+=`<div class="present-divider"></div>`;
+        }
+        if(presents.length){
+          inner+=`<div class="present-section">`;
+          presents.forEach(({p,i,st})=>{
+            const cfg=STATUS_CONFIG[st];
+            const g=effectiveGuard===i?' is-guard':'';
+            inner+=`<div class="person-chip ${cfg.cls}${g}" onclick="cycleStatus(${i},${viewYear},${viewMonth},${day})">${cfg.short} ${p}</div>`;
+          });
+          inner+=`</div>`;
+        }
+      } else if(holiday){
+        inner+=`<div class="absent-section">`;
+        TEAM.forEach((p,i)=>{
+          const g=effectiveGuard===i?' is-guard':'';
+          inner+=`<div class="person-chip${g}" style="background:var(--holiday-bg);color:#6d28d9;border:${g?'2px solid var(--guard)':'1px solid #c4b5fd'};font-size:10px;font-weight:600;border-radius:5px;padding:2px 5px;">🎌 ${p}</div>`;
         });
-        inner += `</div>`;
-        if (presents.length) inner += `<div class="present-divider"></div>`;
+        inner+=`</div>`;
       }
-      if (presents.length) {
-        inner += `<div class="present-section">`;
-        presents.forEach(({p,i,st}) => {
-          const cfg = STATUS_CONFIG[st];
-          const isGuard = (effectiveGuard === i) ? ' is-guard' : '';
-          inner += `<div class="person-chip ${cfg.cls}${isGuard}" onclick="cycleStatus(${i},${viewYear},${viewMonth},${day})" title="${p} — ${cfg.label}${isGuard?' 🛡️ Permanence':''}">${cfg.short} ${p}</div>`;
-        });
-        inner += `</div>`;
-      }
-    } else if (holiday) {
-      inner += `<div class="absent-section">`;
-      TEAM.forEach((p,i) => {
-        const isGuard = (effectiveGuard === i) ? ' is-guard' : '';
-        inner += `<div class="person-chip${isGuard}" style="background:var(--holiday-bg);color:#6d28d9;border:${isGuard?'2px solid var(--guard-ring)':'1px solid #c4b5fd'};font-size:10px;font-weight:600;border-radius:5px;padding:2px 5px;">🎌 ${p}</div>`;
-      });
-      inner += `</div>`;
+      html+=`<div class="${cls}">${inner}</div>`;
     }
-
-    bodyHtml += `<div class="${cls}">${inner}</div>`;
   }
-  document.getElementById('calendar-body').innerHTML = bodyHtml;
 
-  // ── Colonne gauche astreinte ──
-  let asideHtml = '';
-  for (let r = 0; r < totalRows; r++) {
-    const wKey    = weekKeys[r];
-    const guardIdx = getGuard(wKey);
-    const label   = guardIdx !== null ? TEAM[guardIdx] : '—';
-    const btnCls  = guardIdx !== null ? `guard-btn p${guardIdx}` : 'guard-btn none';
-    const title   = guardIdx !== null ? `Personne en charge : ${TEAM[guardIdx]}\nClic pour changer` : 'Clic pour désigner l\'personne en charge';
-    asideHtml += `
-      <div class="aside-week-cell">
-        <button class="${btnCls}" onclick="cycleGuard('${wKey}')" title="${title}">
-          ${guardIdx !== null ? '🛡️<br>' : ''}${label}
-        </button>
-      </div>`;
-  }
-  document.getElementById('aside-rows').innerHTML = asideHtml;
+  document.getElementById('cal-grid').innerHTML=html;
 
   // ── Stats ──
-  let workDays = 0;
-  const counts = TEAM.map(() => ({present:0,wfh:0,conge:0}));
-  const astrCounts = new Array(TEAM.length).fill(0);
-
-  for (let d = 1; d <= totalDays; d++) {
-    const dk = dateKey(viewYear, viewMonth, d);
-    if (!isWeekend(viewYear, viewMonth, d) && !holidays[dk]) {
+  let workDays=0;
+  const counts=TEAM.map(()=>({present:0,wfh:0,conge:0}));
+  const astrCounts=new Array(TEAM.length).fill(0);
+  for(let d=1;d<=totalDays;d++){
+    const dk=dateKey(viewYear,viewMonth,d);
+    if(!isWeekend(viewYear,viewMonth,d)&&!holidays[dk]){
       workDays++;
-      TEAM.forEach((_,i) => { const st=getStatus(i,viewYear,viewMonth,d); counts[i][st]++; });
-      const rowIdx   = getWeekRow(d, firstDay);
-      const eg = getEffectiveGuard(viewYear, viewMonth, d, getGuard(weekKeys[rowIdx]));
-      if (eg !== null) astrCounts[eg]++;
+      TEAM.forEach((_,i)=>{const st=getStatus(i,viewYear,viewMonth,d);counts[i][st]++;});
+      const row=getWeekRow(d,firstDay);
+      const eg=getEffectiveGuard(viewYear,viewMonth,d,getGuard(weekKeys[row]));
+      if(eg!==null) astrCounts[eg]++;
     }
   }
-
-  const pColors = ['#0ea5e9','#10b981','#f59e0b'];
-  let statsHtml = `<div class="stat-card"><div class="stat-label">Jours ouvrés</div><div class="stat-value" style="color:var(--text)">${workDays}</div><div class="stat-sub">${MONTHS_FR[viewMonth]}</div></div>`;
-  TEAM.forEach((p,i) => {
-    statsHtml += `<div class="stat-card">
+  const pColors=['#0ea5e9','#10b981','#f59e0b'];
+  let statsHtml=`<div class="stat-card"><div class="stat-label">Jours ouvrés</div><div class="stat-value" style="color:var(--text)">${workDays}</div><div class="stat-sub">${MONTHS_FR[viewMonth]}</div></div>`;
+  TEAM.forEach((p,i)=>{
+    statsHtml+=`<div class="stat-card">
       <div class="stat-label" style="color:${pColors[i]}">${p}</div>
-      <div class="stat-value" style="font-size:15px;">
-        🏢<span style="color:var(--present)">${counts[i].present}</span>
-        🏠<span style="color:var(--wfh)">${counts[i].wfh}</span>
-        🌴<span style="color:var(--conge)">${counts[i].conge}</span>
-      </div>
+      <div class="stat-value" style="font-size:15px;">🏢<span style="color:var(--present)">${counts[i].present}</span> 🏠<span style="color:var(--wfh)">${counts[i].wfh}</span> 🌴<span style="color:var(--conge)">${counts[i].conge}</span></div>
       <div class="stat-sub">🛡️ Permanence : <strong style="color:var(--guard)">${astrCounts[i]} j</strong></div>
     </div>`;
   });
-  document.getElementById('stats-bar').innerHTML = statsHtml;
+  document.getElementById('stats-bar').innerHTML=statsHtml;
 }
 
-function prevMonth(){ if(viewMonth===0){viewMonth=11;viewYear--;}else viewMonth--; renderAll(); }
-function nextMonth(){ if(viewMonth===11){viewMonth=0;viewYear++;}else viewMonth++; renderAll(); }
+function prevMonth(){if(viewMonth===0){viewMonth=11;viewYear--;}else viewMonth--;renderAll();}
+function nextMonth(){if(viewMonth===11){viewMonth=0;viewYear++;}else viewMonth++;renderAll();}
 
 loadData();
 </script>
